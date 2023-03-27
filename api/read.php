@@ -6,29 +6,17 @@ include_once dirname(__DIR__) . '/config/database.php';
 include_once dirname(__DIR__) . '/class/authors.php';
 include_once dirname(__DIR__) . '/class/books.php';
 
-<<<<<<< HEAD
 function getData($class, $data = null) {
-=======
-function getData($class) {
->>>>>>> 25a5795b655cb28f883da02d9a5162fbe056580c
     $database = new Database();
     $db = $database->getConnection();
 
     if($class == 'authors') {
         $items = new Authors($db);
-<<<<<<< HEAD
         $stmt = $items->getAuthors($data);
     }
     if($class == 'books') {
         $items = new Books($db);
-        $stmt = $items->getBooks($data);
-=======
         $stmt = $items->getAuthors();
-    }
-    if($class == 'books') {
-        $items = new Books($db);
-        $stmt = $items->getBooks();
->>>>>>> 25a5795b655cb28f883da02d9a5162fbe056580c
     }
 
     $itemCount = $stmt->rowCount();
@@ -69,9 +57,4 @@ function getData($class) {
         );
     }
 }
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 25a5795b655cb28f883da02d9a5162fbe056580c
 ?>

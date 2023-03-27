@@ -9,11 +9,8 @@ include_once dirname(__DIR__) . '/config/database.php';
 include_once dirname(__DIR__) . '/class/authors.php';
 include_once dirname(__DIR__) . '/class/books.php';
 
-<<<<<<< HEAD
 function getData($class, $datas = null) {
-=======
-function getData($class) {
->>>>>>> 25a5795b655cb28f883da02d9a5162fbe056580c
+
     $database = new Database();
     $db = $database->getConnection();
 

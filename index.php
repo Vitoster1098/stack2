@@ -30,7 +30,6 @@ $urls = explode('/', $url);
 
 $router = $urls[0]; //class type
 $urlData = array_slice($urls, 1);
-<<<<<<< HEAD
 
 //get all
 if($method === 'GET' && (count($urlData) !== 1 && in_array('release_date', $urlData) || count($urlData) === 0)) {
@@ -38,14 +37,6 @@ if($method === 'GET' && (count($urlData) !== 1 && in_array('release_date', $urlD
 }
 //get by id
 else if($method === 'GET' && (count($urlData) === 1 || count($urlData) === 2)) {
-=======
-//get all
-if($method === 'GET' && count($urlData) === 0) {
-    include_once 'api/read.php';
-}
-//get by id
-else if($method === 'GET' && count($urlData) === 1) {
->>>>>>> 25a5795b655cb28f883da02d9a5162fbe056580c
     include_once 'api/single_read.php';
 }
 //create
@@ -67,10 +58,7 @@ else {
         'error' => 'Bad Request'
     ]);
 }
-<<<<<<< HEAD
+
 getData($router, $urlData);
-=======
 //var_dump($urlData);
-getData($router);
->>>>>>> 25a5795b655cb28f883da02d9a5162fbe056580c
 ?>
