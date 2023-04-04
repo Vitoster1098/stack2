@@ -36,7 +36,7 @@ if($method === 'GET' && count($urlData) === 1) {
     include_once 'api/read.php';
 }
 //get with filters
-else if($method === 'GET' || in_array('s', $urlData)) {
+else if($method === 'GET' && in_array('s', $urlData)) {
     include_once 'api/read.php';
 }
 //get by id
