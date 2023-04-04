@@ -32,11 +32,11 @@ $router = $urls[0]; //class type
 $urlData = array_slice($urls, 1);
 
 //get all
-if($method === 'GET' && (count($urlData) !== 1 && in_array('release_date', $urlData) || count($urlData) === 0)) {
+if($method === 'GET' && count($urlData) === 2) {
     include_once 'api/read.php';
 }
 //get by id
-else if($method === 'GET' && (count($urlData) === 1 || count($urlData) === 2)) {
+else if($method === 'GET' && count($urlData) > 2) {
     include_once 'api/single_read.php';
 }
 //create

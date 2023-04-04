@@ -24,14 +24,9 @@ class Authors
     {
         $sqlQuery = "SELECT `id`, `first_name`, `second_name`, `last_name`, `birthday` " .
             "FROM " . $this->table_name;
-        if ($filters[0] == 'title') {
-            $sqlQuery = "SELECT " . $this->table_name . ".`id`, 
-            " . $this->table_name . ".`first_name`, 
-            " . $this->table_name . ".`second_name`, 
-            " . $this->table_name . ".`last_name`, 
-            " . $this->table_name . ".`birthday` " .
-                "FROM " . $this->table_name . ", books";
-        }
+        $stmt = $this->conn->prepare($sqlQuery);
+        $stmt->execute();
+        return $stmt;
     }
     //get single
     public function getAuthorById($filters = null)

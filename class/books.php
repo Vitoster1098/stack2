@@ -20,18 +20,10 @@ class Books
     //get all
     public function getBooks($filters = null) {
         $sqlQuery = "SELECT `id`, `title`, `author_id`, `release_date` FROM " . $this->table_name;
-        if($filters[0] == 'release_date') {
-            $sqlQuery .= " WHERE `" . $filters[0] ."`";
-            if(!is_null($filters)) {
-                if(count($filters) >= 3) {
-                    $sqlQuery .= " BETWEEN '" . $filters[1] . "' AND '" . $filters[2] . "'";
-                }
-                else if(count($filters) == 2) {
-                    $sqlQuery .= " > '" . $filters[1] . "'";
-                }
-            }
-        }
-        }
+        $stmt = $this->conn->prepare($sqlQuery);
+        $stmt->execute();
+        return $stmt;
+    }
     //get single
     public function getBookById() {
         $sqlQuery = "SELECT " . $this->table_name . ".`id`, "
