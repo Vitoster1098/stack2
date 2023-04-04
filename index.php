@@ -32,16 +32,12 @@ $router = $urls[0]; //class type
 $urlData = array_slice($urls, 1);
 
 //get all
-if($method === 'GET' && count($urlData) === 1) {
-    include_once 'api/read.php';
-}
-//get with filters
-else if($method === 'GET' && in_array('s', $urlData)) {
-    include_once 'api/read.php';
-}
-//get by id
-else if($method === 'GET' && count($urlData) > 2) {
+if($method === 'GET' && count($urlData) == 1) {
     include_once 'api/single_read.php';
+}
+//get all or with filters
+else if($method === 'GET' || in_array('s', $urlData)) {
+    include_once 'api/read.php';
 }
 //create
 else if($method === 'POST') {
@@ -64,5 +60,5 @@ else {
 }
 
 getData($router, $urlData);
-//var_dump($urlData);
+#var_dump($urlData);
 ?>

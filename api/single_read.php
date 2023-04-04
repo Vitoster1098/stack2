@@ -53,13 +53,6 @@ function getData($class, $data = null)
             http_response_code(200);
             echo json_encode($Params);
         }
-        else {
-            http_response_code(404);
-            echo json_encode( "Book not found.");
-        }
-
-        http_response_code(200);
-        echo json_encode($Params);
     }
     else {
         http_response_code(404);

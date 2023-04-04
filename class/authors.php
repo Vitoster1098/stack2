@@ -82,17 +82,17 @@ class Authors
     //get single
     public function getAuthorById($filters = null)
     {
-        $sqlQuery = "SELECT " . $this->table_name . ".`id`, "
-            . $this->table_name . ".`first_name`, "
-            . $this->table_name . ".`second_name`, "
-            . $this->table_name . ".`last_name`, "
-            . $this->table_name . ".`birthday`, "
-            . "books.`title` as `books` " .
-            "FROM " . $this->table_name . ", books " .
-            "WHERE " . $this->table_name . ".`id`= ? AND books.`author_id` = " . $this->table_name . ".`id` " .
-            "LIMIT 0,1;";
+        $sqlQuery = "SELECT `id`, 
+            `first_name`, 
+            `second_name`, 
+            `last_name`, 
+            `birthday` " .
+            "FROM " . $this->table_name .
+            " WHERE `id`= ? 
+            LIMIT 1";
 
         $stmt = $this->conn->prepare($sqlQuery);
+        $stmt->bindParam(1, $this->id);
         $stmt->execute();
         $dataRow = $stmt->fetch(PDO::FETCH_ASSOC);
 
