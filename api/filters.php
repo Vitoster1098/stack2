@@ -16,7 +16,7 @@ function getData($class, $data = null) {
     }
     if($class == 'books') {
         $items = new Books($db);
-        $stmt = $items->getBooks($data);
+        $stmt = $items->getBooks();
     }
 
     $itemCount = $stmt->rowCount();

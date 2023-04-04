@@ -3,16 +3,14 @@
 class Authors
 {
     private $conn;
-    private $table_name = "authors";
+    private string $table_name = "authors";
 
     //fields
-    public $id;
-    public $first_name;
-    public $second_name;
-    public $last_name;
-    public $birthday;
-    public $books;
-
+    public int $id;
+    public string $first_name;
+    public string $second_name;
+    public string $last_name;
+    public string $birthday;
 
     //db constructor
     public function __construct($db)
@@ -23,7 +21,60 @@ class Authors
     public function getAuthors($filters = null)
     {
         $sqlQuery = "SELECT `id`, `first_name`, `second_name`, `last_name`, `birthday` " .
-            "FROM " . $this->table_name;
+            "FROM " . $this->table_name .
+            " WHERE `id` > '-1'";
+
+        if(in_array('first_name', $filters)) {
+            $ind = array_search('first_name', $filters);
+
+            if(isset($filters[$ind + 1])) {
+                if(is_string($filters[$ind+1])) {
+                    $sqlQuery .= " AND `first_name` = '" . $filters[$ind + 1] . "'";
+                }
+            }
+        }
+        if(in_array('second_name', $filters)) {
+            $ind = array_search('second_name', $filters);
+
+            if(isset($filters[$ind + 1])) {
+                if(is_string($filters[$ind+1])) {
+                    $sqlQuery .= " AND `second_name` = '" . $filters[$ind + 1] . "'";
+                }
+            }
+        }
+        if(in_array('last_name', $filters)) {
+            $ind = array_search('last_name', $filters);
+
+            if(isset($filters[$ind + 1])) {
+                if(is_string($filters[$ind+1])) {
+                    $sqlQuery .= " AND `last_name` = '" . $filters[$ind + 1] . "'";
+                }
+            }
+        }
+        if(in_array('birthday', $filters)) {
+            $ind = array_search('birthday', $filters);
+
+            if(isset($filters[$ind + 1]) && isset($filters[$ind + 2])) {
+                if (strtotime($filters[$ind + 1]) && strtotime($filters[$ind + 2])) {
+                    $sqlQuery .= " AND `birthday` BETWEEN DATE('" . $filters[$ind + 1] . "') AND DATE('" .
+                        $filters[$ind + 2] . "')";
+                }
+                if ($filters[$ind + 1] == '<' || $filters[$ind + 1] == '>' && strtotime($filters[$ind + 2])) {
+                    $sqlQuery .= " AND `birthday` " . $filters[$ind + 1] . " DATE('" . $filters[$ind + 2] . "')";
+                }
+            }
+        }
+        if(in_array('LIMIT', $filters)) {
+            $ind = array_search('LIMIT', $filters);
+
+            if(isset($filters[$ind + 1])) {
+                if (is_numeric($filters[$ind + 1])) {
+                    $sqlQuery .= " LIMIT " . $filters[$ind + 1];
+                }
+            }
+        }#var_dump($sqlQuery);
+
+
         $stmt = $this->conn->prepare($sqlQuery);
         $stmt->execute();
         return $stmt;
@@ -41,18 +92,14 @@ class Authors
             "WHERE " . $this->table_name . ".`id`= ? AND books.`author_id` = " . $this->table_name . ".`id` " .
             "LIMIT 0,1;";
 
-        if ($filters[1] == 'count') {
-            $sqlQuery = "SELECT " . $this->table_name . ".`id`, "
-                . $this->table_name . ".`first_name`, "
-                . $this->table_name . ".`second_name`, "
-                . $this->table_name . ".`last_name`, "
-                . $this->table_name . ".`birthday`, "
-                . "count(books.`author_id`) as `books count`" .
-                "FROM " . $this->table_name . ", books " .
-                "WHERE " . $this->table_name . ".`id`= ? AND books.`author_id` = " . $this->table_name . ".`id` " .
-                "GROUP BY books.`author_id` " .
-                "LIMIT 0,1";
-        }
+        $stmt = $this->conn->prepare($sqlQuery);
+        $stmt->execute();
+        $dataRow = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $this->first_name = $dataRow['first_name'];
+        $this->second_name = $dataRow['second_name'];
+        $this->last_name = $dataRow['last_name'];
+        $this->birthday = $dataRow['birthday'];
     }
     //create
     public function createAuthor(): bool

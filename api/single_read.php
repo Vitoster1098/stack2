@@ -27,7 +27,6 @@ function getData($class, $data = null)
                 "second_name" => $item->second_name,
                 "last_name" => $item->last_name,
                 "birthday" => $item->birthday,
-                "books" => $item->books,
             ];
             http_response_code(200);
             echo json_encode($Params);

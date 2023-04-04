@@ -1,16 +1,15 @@
 <?php
-
 class Books
 {
     private $conn;
-    private $table_name = "books";
+    private string $table_name = "books";
 
     // поля
-    public $id;
-    public $title;
-    public $author_id;
-    public $release_date;
-    public $author;
+    public int $id;
+    public string $title;
+    public int $author_id;
+    public string $release_date;
+    public string $author;
 
     // конструктор для соединения с бд
     public function __construct($db)
@@ -19,7 +18,41 @@ class Books
     }
     //get all
     public function getBooks($filters = null) {
-        $sqlQuery = "SELECT `id`, `title`, `author_id`, `release_date` FROM " . $this->table_name;
+        $sqlQuery = "SELECT `id`, `title`, `author_id`, `release_date` FROM " . $this->table_name .
+            " WHERE `id` > '-1'";
+
+        if(in_array('title', $filters)) {
+            $ind = array_search('title', $filters);
+
+            if(isset($filters[$ind + 1])) {
+                if(is_string($filters[$ind+1])) {
+                    $sqlQuery .= " AND `title` = '" . $filters[$ind + 1] . "'";
+                }
+            }
+        }
+        if(in_array('release_date', $filters)) {
+            $ind = array_search('release_date', $filters);
+
+            if(isset($filters[$ind + 1]) && isset($filters[$ind + 2])) {
+                if (strtotime($filters[$ind + 1]) && strtotime($filters[$ind + 2])) {
+                    $sqlQuery .= " AND `release_date` BETWEEN DATE('" . $filters[$ind + 1] . "') AND DATE('" .
+                        $filters[$ind + 2] . "')";
+                }
+                if ($filters[$ind + 1] == '<' || $filters[$ind + 1] == '>' && strtotime($filters[$ind + 2])) {
+                    $sqlQuery .= " AND `release_date` " . $filters[$ind + 1] . " DATE('" . $filters[$ind + 2] . "')";
+                }
+            }
+        }
+        if(in_array('LIMIT', $filters)) {
+            $ind = array_search('LIMIT', $filters);
+
+            if(isset($filters[$ind + 1])) {
+                if (is_numeric($filters[$ind + 1])) {
+                    $sqlQuery .= " LIMIT " . $filters[$ind + 1];
+                }
+            }
+        }#var_dump($sqlQuery);
+
         $stmt = $this->conn->prepare($sqlQuery);
         $stmt->execute();
         return $stmt;
